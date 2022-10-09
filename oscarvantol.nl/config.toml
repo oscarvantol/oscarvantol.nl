@@ -1,0 +1,31 @@
+baseURL = 'https://oscarvantol.nl/'
+languageCode = 'en-us'
+title = 'oscarvantol.nl'
+theme = 'PaperMod'
+
+[menu]
+[[menu.main]]
+  identifier = 'home'
+  name = 'Home'
+  title = 'home'
+  url = '/'  
+  weight = 1
+[[menu.main]]
+  identifier = 'blogs'
+  name = 'Blogs'
+  title = 'blogs'
+  url = '/blogs/'
+  weight = 2  
+[[menu.main]]
+  identifier = 'videos'
+  name = 'Videos'
+  title = 'videos'
+  url = '/videos/'
+  weight = 3
+[[menu.main]]
+  identifier = 'podcast'
+  name = 'Podcast'
+  title = 'podcast'
+  url = '/podcast/'
+  weight = 4
+

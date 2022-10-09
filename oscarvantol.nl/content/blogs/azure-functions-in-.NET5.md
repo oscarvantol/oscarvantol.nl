@@ -1,12 +1,14 @@
 ---
 date: 2021-03-27
 title: Azure Functions in .NET 5 and beyond
+aliases:
+    - /blog-azure-functions-in-.NET5
 ---
 In November of 2020 .NET 5 got released, the promise of "one-dotnet". The 'core' addition has been dropped and Full Framework evolution has stopped at the 4.8 version. This does not mean Full Framework support ends, this is tied to the support of windows therefore you can expect an eternity of patches. But when you are building something new now you should use .NET 5 or .NET core 3.1 because of its long term support. 
 
 Right from the release of .NET 5 we could start using it in for example Azure App Service but for Azure Functions this was not the case. As a heavy user of Azure Functions this topic had my interest and I followed the development a bit and in this post you can read what I got away from this.
 
-![alt text](https://oscarvantol.nl/assets/blog-af5/azure-functions-logo-color-raster.png "Azure Functions")
+![alt text](/assets/blog-af5/azure-functions-logo-color-raster.png "Azure Functions")
 
 ## Why wasn't it there already?
 The reason that this is a bit more challenging is because the way the .NET model for Azure Function is implemented. The functions that you create will build a library that is loaded dynamically and hosted inside a running process. That means that that hosted process determines what version of .NET running. Azure Functions V1 was running .NET Full Framework and from V2 this was .NET core. The design of Azure Functions originates from Azure WebJobs and as you can imagine these libraries have some history by now. This makes it a lot of effort to get every next version of .NET to work, but also to get everything on the Azure side working side by side with a lot of different versions of .NET.

@@ -1,6 +1,8 @@
 ---
 date: 2020-02-20
 title: Writing an Azure DevOps Pipeline extension
+aliases:
+    - /blog-azure-piplines
 ---
  *How I ended up having a Saturday night date with the Azure DevOps marketplace.*
 

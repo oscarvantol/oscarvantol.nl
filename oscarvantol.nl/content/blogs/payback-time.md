@@ -1,6 +1,8 @@
 ---
 date: 2019-08-16
 title: You are only paying a small part of your dev team 
+aliases:
+    - /blog-payback-time
 ---
 
 *The software your team builds relies on a lot of code that is written by people outside your organisation. Are you paying them or thanking them even?*

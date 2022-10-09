@@ -1,6 +1,8 @@
 ---
 title: Playwright, NUnit, Page Object Models and Dependencies
 date: 2022-07-11
+aliases:
+    - /blog-playwright
 ---
 
 # 

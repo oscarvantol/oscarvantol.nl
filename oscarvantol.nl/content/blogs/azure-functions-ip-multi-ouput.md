@@ -1,11 +1,13 @@
 ---
 date: 2021-04-14
 title: Multiple output bindings in Azure Functions (isolated process model)
+aliases: 
+    - /blog-azure-functions-ip-multi-ouput
 ---
 
 The new Azure Functions Isolated Process Model is a bit different than the one you might be used to. If you are not familiar with the new model you should first read this: [2021-03-27 Azure Functions in .NET 5 and beyond](https://dev.to/oscarvantol/azure-functions-in-net-5-and-beyond-26d6)
 
-![alt text](https://oscarvantol.nl/assets/blog-af5/azure-functions-logo-color-raster.png "Azure Functions")
+![alt text](/assets/blog-af5/azure-functions-logo-color-raster.png "Azure Functions")
 
 In the new isolated model the output binding for a simple http function is similar to the old class library model, the return value of your method **is** the http response. If you need additional output bindings things did change, a lot! You can no longer specify binding attributes on the arguments (like IAsyncCollector) of your function. If you want to use multiple output bindings for your function in the new model, this is also done through the return value of the function method. 
 

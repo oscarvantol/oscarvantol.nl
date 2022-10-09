@@ -1,6 +1,8 @@
 ---
 date: 2020-09-23
 title: Azure App Configuration and Azure Functions
+aliases:
+    - /blog-app-configuration-and-azure-functions
 ---
 
 Azure App configuration is an amazing service that we have been using in our project to centralize our configuration. If you are unfamiliar with the service I suggest reading [Azure App Configuration: an introduction](https://www.rickvandenbosch.net/blog/azure-app-configuration-an-introduction/) by [@rickvdbosch](https://twitter.com/rickvdbosch).

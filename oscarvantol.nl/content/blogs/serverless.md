@@ -1,6 +1,8 @@
 ---
 date: 2020-09-24
 title: The state of the cloud, serverless
+aliases:
+    - /blog-serverless
 ---
 
 It looks like the world is changing faster than ever before, disrupting start-ups come from nowhere and challenge big companies. Technology provides connectivity as never before and the possibilities seem endless. This year the world got challenged like never before and we are using technology to overcome issues in our daily life that would not have been possible 10 or even 5 years ago. In the past decade I have talked to a lot of development teams, CTOs and decision makers about the cloud, mainly Azure. From just grasping the concepts to helping architect specific solutions. If I look back, the term that was defining was 'As A Service'. 

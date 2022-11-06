@@ -1,0 +1,23 @@
+{
+    "subject": "acct:oscarvantol@toot.community",
+    "aliases": [
+        "https://toot.community/@oscarvantol",
+        "https://toot.community/users/oscarvantol"
+    ],
+    "links": [
+        {
+            "rel": "http://webfinger.net/rel/profile-page",
+            "type": "text/html",
+            "href": "https://toot.community/@oscarvantol"
+        },
+        {
+            "rel": "self",
+            "type": "application/activity+json",
+            "href": "https://toot.community/users/oscarvantol"
+        },
+        {
+            "rel": "http://ostatus.org/schema/1.0/subscribe",
+            "template": "https://toot.community/authorize_interaction?uri={uri}"
+        }
+    ]
+}

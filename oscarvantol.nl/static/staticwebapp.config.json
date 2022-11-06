@@ -1,0 +1,12 @@
+{
+    "trailingSlash": "auto",
+    "navigationFallback": {
+        "rewrite": "/index.html"
+    },
+    "routes": [
+        {
+            "route": "/.well-known/webfinger",
+            "rewrite": "/.well-known/webfinger.json"
+        }
+    ]
+}

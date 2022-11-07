@@ -11,7 +11,7 @@
         },
         {
             "route": "/mstdn",
-            "redirect": "https://toot.community/@oscarvantol",
+            "redirect": "https://toot.community/users/oscarvantol",
             "statusCode":  302
         }
 

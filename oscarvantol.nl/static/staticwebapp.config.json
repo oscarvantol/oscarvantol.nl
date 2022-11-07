@@ -6,7 +6,8 @@
     "routes": [
         {
             "route": "/.well-known/webfinger",
-            "rewrite": "/.well-known/webfinger.json"
+            "redirect": "https://toot.community/.well-known/webfinger?resource=acct:oscarvantol@toot.community",
+            "statusCode": 302
         }
     ]
 }

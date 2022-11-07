@@ -8,6 +8,12 @@
             "route": "/.well-known/webfinger",
             "redirect": "https://toot.community/.well-known/webfinger?resource=acct:oscarvantol@toot.community",
             "statusCode": 302
+        },
+        {
+            "route": "/mstdn",
+            "redirect": "https://toot.community/@oscarvantol",
+            "statusCode":  302
         }
+
     ]
 }

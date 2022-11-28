@@ -1,59 +1,47 @@
 ---
 draft: true
-title: Publish from GitHub to Azure the nice way
+title: The way you should Deploy to Azure from GitHub
+Deploying to Azure with GitHub Actions, no password required
 
 ---
 
 
-I work a lot with Azure and Azure DevOps and just for the record, I still love Azure DevOps! Even though I don't think Azure DevOps will suddenly dissapear with a snap I do think the future is in GitHub. At the moment of writing this I am preparing a workshop day to go through the current GitHub features from the ISV perspective. This means that in that training we will go through every feature in GitHub that could replace the one you are using right now in Azure DevOps. 
+I work a lot with Azure and Azure DevOps and just for the record, I still love Azure DevOps! Even though I don't think Azure DevOps will suddenly dissapear. I do think the future is in GitHub. I was asked to host a workshop for a group of professionals that work for an ISV about GitHub and Azure. This made me do a lot of comparisons between Azure DevOps and GitHub from the non open source perspective. One of the topics really made me want to write a post, maybe I'm a bit special to get excited about this but I just love the GitHub OIDC option to deploy to Azure.
 
 ## Deploying to Azure
 
-Lets say you want to build an app and deploy it to Azure with a GitHub Action. There are multiple ways to do that, from an Azure DevOps perspective you might be used to setup a Service Connection to your Azure Subscription or maybe to a resource group. In GitHub there is a similar construction to do this, you can create a service principle and generate a secret in Azure and copy the nescesary context over to the GitHub repository's secrets. Some of the drawbacks of having an actual password like secret are that you need to pass the secret around, it can be used from everywhere and that the secret expires.
+Lets say you want to build an app and deploy it to Azure with GitHub Actions. There are multiple ways to do that, from an Azure DevOps perspective you might be used to setup a Service Connection to your Azure Subscription or maybe to a resource group. In GitHub there is a similar construction to do this, you can create a service principle and generate a secret in Azure and copy the nescesary context over to the GitHub repository's secrets. Some of the drawbacks of having an actual password like secret are that you need to pass the secret around, it can be used from everywhere and that the secret expires.
 
-## The nice way
+## The proper way
 
-There is a similar construction that does not use an actual secret but it builds a trust with your repository so that the token credential can be generated when your pipeline (action) is running. This setup is called: **OpenID Connect with an Azure service principal using a Federated Identity Credential**. The idea behind this is that on one hand you have an App Registration with a Service Principal in Azure that has access to a resource group or subscription. On the other hand you have a GitHub Action that only requests a token using the **ApplicationClientId**, **TenantId** and **SubscriptionId**. 
+There is a similar construction that does not use an actual secret but it builds a trust with your repository so that the token credential can be generated when your action is running. This setup is called: **OpenID Connect with an Azure service principal using a Federated Identity Credential**. The idea behind this is that on one side you have an App Registration with a the permissions to access a resource group or subscription. On the other side you have a GitHub Action that requests a token only using the **ApplicationClientId**, **TenantId** and **SubscriptionId**. The access token will only be shortly available while running a job. 
 
 _But how does Azure decide to supply that token with just three guids and without some kind of real secret?_
 
-For this we need at least one **Federated Identity Credential**, this FIC is defined in Azure and references your GitHub repo. You can setup three kinds of Federated Identity Credentials for GitHub, `branch`, `pull request` and `environment`.
+What needs to be done is telling Azure that GitHub will ask for a token from an Action in a specific repository. For this we use something called **Federated Identity Credential**, this FIC is created in under an App registration in Azure and defines a direct trust between itself and the GitHub Action's Repo that will request a token. There are four different contexts (Entity Type) that you can define it is allowed to retrieve the token. 
+
+The first and most obvious is `branch`, per federated credential you can define a branchname that is allowed to use the fic. The next ones are `pull request` and `tag` and you can imagine when you would use that. The third and I think most powerful is `environment`, environments are an excellent way to do gated deployment and they can have their own secrets.
 
 ## What are the steps?
 
 
-### 1. Create the application and the service principal
-We are going to use the Azure Cli to create an app and a service principal. When you create the app you will get an appId, this will be input for the service principal. Creating your Service Principal will return objectId, you need this in the next step.
+### 1. Create an app registration
+For this, go to Azure Active Directory in the Azure Portal and click 'App registrations'. Create a new app registration, fill in a name and click register. You will land on a screen, from this screen copy the ```Application (client) ID``` and the ```Directory (tenant) ID``` and put them in document to use in step 4.
 
-```
-# create the app, this will output the appId
-#
-> az ad app create --display-name my-app-name1 --query appId
-"36790de3-0a90-4a0d-b867-0bc5fad4c16d"
+### 2. Set Azure permissions for the app registration
+In this step you will determine to what resources in Azure your Action will have permissions. For instance you can go to a resource group and click ```Access control (IAM)```, from there you can add a role assignment and add your newly created app registration as a member.
 
-# create the service principal, this will output the objectId
-#
-> az ad sp create --id 36790de3-0a90-4a0d-b867-0bc5fad4c16d --query objectId 
-"6e62903a-6ef7-4e96-bb3c-f0b15d1b1bce"
+### 3. Add Federated Credentials for GitHub
+Now we need to put your GitHub repo on the guest list. For this we return to you app registration and click ```Certificates & Secrets```, from there you select ```Federated Credentials``` and click add. You will be confronted with a drop down, in that you can find: GitHub Actions deploying Azure resources. You should be able to fill in the rest of the form and press add.
 
-```
+### 4. Copy some guids
+In your Action you need to provide 3 ids to login, even though these are not passwords it is best to use GitHub Secrets and not put them directly in code. 
 
 
-### 2. Grant permissions to Azure Resources
-```
-# assign a role to the service principal
-#
-az role assignment create --role contributor --subscription <put-your-subscription-id-here> --assignee-object-id 6e62903a-6ef7-4e96-bb3c-f0b15d1b1bce --assignee-principal-type ServicePrincipal
+### 5. Create a workflow that requests a token
 
-```
+### 6. Fix your indentation in the yaml file and try again
+Some lucky people can skip this step ;)
 
-### 3. Create a Federated Identity Credential
-
-### 4. Save the 'secrets' in GitHub
-
-### 5. Connect to Azure in a GitHub Action
-
-## This is a lot of stuff
-This is quite a recipe and you need to do this for all the repositories you work with for at least one but maybe multiple target environments. For this reason I created an example all in one script and shared it [here](). It's a powershell script that you should be able to run while being logged in to the correct tenant with the Azure Cli and even sets the Secrets in GitHub using the GitHub Cli. I hope this helps a bit!
 
 [oscarvantol.nl](https://oscarvantol.nl) 

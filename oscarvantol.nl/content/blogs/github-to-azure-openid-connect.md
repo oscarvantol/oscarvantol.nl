@@ -1,16 +1,14 @@
 ---
 draft: true
-title: The way you should Deploy to Azure from GitHub
-Deploying to Azure with GitHub Actions, no password required
+title: Deploying to Azure from GitHub Actions, no passwords required!
 
 ---
 
-
-I work a lot with Azure and Azure DevOps and just for the record, I still love Azure DevOps! Even though I don't think Azure DevOps will suddenly dissapear. I do think the future is in GitHub. I was asked to host a workshop for a group of professionals that work for an ISV about GitHub and Azure. This made me do a lot of comparisons between Azure DevOps and GitHub from the non open source perspective. One of the topics really made me want to write a post, maybe I'm a bit special to get excited about this but I just love the GitHub OIDC option to deploy to Azure.
+I work a lot with Azure and Azure DevOps and just for the record, I still love Azure DevOps! Even though I don't think Azure DevOps will suddenly disappear. I do think the future is in GitHub. I was asked to host a workshop for a group of professionals that work for an ISV about GitHub and Azure. This made me do a lot of comparisons between Azure DevOps and GitHub from the non open source perspective. One of the topics really made me want to write a post, maybe I'm a bit special to get excited about this but I just love the GitHub OIDC option to deploy to Azure.
 
 ## Deploying to Azure
 
-Lets say you want to build an app and deploy it to Azure with GitHub Actions. There are multiple ways to do that, from an Azure DevOps perspective you might be used to setup a Service Connection to your Azure Subscription or maybe to a resource group. In GitHub there is a similar construction to do this, you can create a service principle and generate a secret in Azure and copy the nescesary context over to the GitHub repository's secrets. Some of the drawbacks of having an actual password like secret are that you need to pass the secret around, it can be used from everywhere and that the secret expires.
+Lets say you want to build an app and deploy it to Azure with GitHub Actions. There are multiple ways to do that, from an Azure DevOps perspective you might be used to setup a Service Connection to your Azure Subscription or maybe to a resource group. In GitHub there is a similar construction to do this, you can create a service principle and generate a secret in Azure and copy the necessary context over to the GitHub repository's secrets. Some of the drawbacks of having an actual password like secret are that you need to pass the secret around, it can be used from everywhere and that the secret expires.
 
 ## The proper way
 
@@ -35,13 +33,46 @@ In this step you will determine to what resources in Azure your Action will have
 Now we need to put your GitHub repo on the guest list. For this we return to you app registration and click ```Certificates & Secrets```, from there you select ```Federated Credentials``` and click add. You will be confronted with a drop down, in that you can find: GitHub Actions deploying Azure resources. You should be able to fill in the rest of the form and press add.
 
 ### 4. Copy some guids
-In your Action you need to provide 3 ids to login, even though these are not passwords it is best to use GitHub Secrets and not put them directly in code. 
+In your Action you need to provide 3 ids to login, even though these are not passwords it is best to use GitHub Secrets and not put them directly in code. You need the create following secrets: AZURE_CLIENT_ID (this is the Application (client) ID from the app registration), AZURE_TENANT_ID, and AZURE_SUBSCRIPTION_ID.
 
 
 ### 5. Create a workflow that requests a token
+In the following example you will find an Azure login step and some cli command, the login step will acquire the token. Make sure you also include the 'permissions' block in there!
+```
+name: Example
+on:  
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      #get a token
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # run a bicep deployment
+      - name: run IaC
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az deployment group create -g somegroup -f app-service.bicep
+            
+```
+
 
 ### 6. Fix your indentation in the yaml file and try again
 Some lucky people can skip this step ;)
+
+
 
 
 [oscarvantol.nl](https://oscarvantol.nl) 

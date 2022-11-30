@@ -1,6 +1,7 @@
 ---
-date: 2020-04-29
-title: Infrastructure as code on Azure
+date: 2099-04-29
+title: Infrastructure as code on Azure (offline)
+draft: true
 ---
 *From the moment a developer writes a piece of code to support a new feature or fix a bug, a journey starts. This journey will hopefully start with some sort of commit and push into a source control system. The end goal of the journey is pretty clear, production (whatever that is in the context). What happens in between can be short and simple or long and complicated, the time the journey takes will mostly be determined by the quality assurance process and the level of automation of the CI/CD pipeline.*
 

@@ -1,7 +1,6 @@
 ---
-date: 2022-12-01
+date: 2022-11-30
 title: Deploying to Azure from GitHub Actions, no passwords required!
-
 ---
 
 I work a lot with Azure and Azure DevOps and just for the record, I still love Azure DevOps! Even though I don't think Azure DevOps will suddenly disappear. I do think the future is in GitHub. I was asked to host a workshop  about GitHub and Azure for a group of professionals. This made me do a lot of comparisons between Azure DevOps and GitHub from the non-open-source perspective. One of the topics really made me want to write a post, maybe I'm a bit weird to get excited about this but I just love the GitHub OIDC option to deploy to Azure.

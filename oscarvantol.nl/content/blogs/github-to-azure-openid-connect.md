@@ -13,11 +13,13 @@ Lets say you want to build an app and deploy it to Azure with GitHub Actions. Th
 
 There is a slightly different way that does not use an actual secret but it builds a trust with your repository so that the token credential can be generated when your GitHub Action is running. This setup is called: **OpenID Connect with an Azure service principal using a Federated Identity Credential**. The idea behind this is that on one side you have an App Registration with a the permissions to access a resource group or subscription. On the other side you have a GitHub Action that requests a token only using the **ApplicationClientId**, **TenantId** and **SubscriptionId**. The access token will only be shortly available while running a job. 
 
+![alt text](/assets/blog-ghoidc/loginstep.png "Actions: retrieve a token")
+
 >_But how does Azure decide to supply that token with just three guids and without some kind of real secret?_
 
 What needs to be done is telling Azure that GitHub will ask for a token from an Action in a specific repository. For this we use something called **Federated Identity Credential**, this FIC is created in under an App registration in Azure and defines a direct trust between itself and the GitHub Action's Repo that will request a token. There are four different contexts (Entity Type) that you can define it is allowed to retrieve the token. 
 
-The first and most obvious is `branch`, per federated credential you can define a branchname that is allowed to use the fic. The next ones are `pull request` and `tag` and you can imagine when you would use that. The third and I think most powerful is `environment`, environments are an excellent way to do gated deployment and they can have their own secrets.
+The first and most obvious is `branch`, per federated credential you can define a branch name that is allowed to use the fic. The next ones are `pull request` and `tag` and you can imagine when you would use that. The third and I think most powerful is `environment`, environments are an excellent way to do gated deployment and they can have their own secrets.
 
 ## What are the steps?
 
@@ -77,7 +79,7 @@ Some lucky people can skip this step ;)
 
 ## Next steps
 
-After getting this to work you have the ingredients for success. This example just lets you login and shows you how to run any az command, that means running IaC using Bicep and deploying resources. Please be aware if you are making a multi step workflow that the jobs are running completely isolated and you might need to login again.
+After getting this to work you have the ingredients for success. This example just lets you login and shows you how to run an az command, with this you can run IaC and do deployments . Please be aware if you are making a multi step workflow that the jobs are running completely isolated, so if you need the token in two jobs you need to run the login step in both.
 
 ## References
 - [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure)
